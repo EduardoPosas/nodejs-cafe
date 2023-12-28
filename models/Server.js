@@ -2,17 +2,25 @@ import express from 'express';
 import cors from 'cors';
 
 import userRoutes from '../routes/user.routes.js';
+import { mongoDbConn } from '../database/config.js';
 
 class Server {
   constructor() {
     this.app = express();
     this.PORT = process.env.PORT || 8001;
 
+    /**Database Connection */
+    this.dbConnection();
+
     /**Middlewares */
     this.middlewares();
 
     /**App routes */
     this.routes();
+  }
+
+  async dbConnection() {
+    await mongoDbConn();
   }
 
   middlewares() {

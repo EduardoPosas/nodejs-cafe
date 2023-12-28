@@ -8,13 +8,20 @@ import {
   deleteUser
 } from '../controllers/user.controller.js';
 
-router.get('/', getUsers);
+import {
+  validateCreate,
+  validateUpdate,
+  validateLimit,
+  validateDelete
+} from '../middleware/user.js';
 
-router.post('/', createUser);
+router.get('/', validateLimit, getUsers);
 
-router.put('/:userId', updateUser);
+router.post('/', validateCreate, createUser);
 
-router.delete('/', deleteUser);
+router.put('/:userId', validateUpdate, updateUser);
+
+router.delete('/:userId', validateDelete, deleteUser);
 
 
 export default router;
