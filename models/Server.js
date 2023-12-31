@@ -1,13 +1,18 @@
 import express from 'express';
 import cors from 'cors';
+import { mongoDbConn } from '../database/config.js';
 
 import userRoutes from '../routes/user.routes.js';
-import { mongoDbConn } from '../database/config.js';
+import authRoutes from '../routes/auth.routes.js';
 
 class Server {
   constructor() {
     this.app = express();
     this.PORT = process.env.PORT || 8001;
+
+    /** Paths */
+    this.userPath = '/api/users';
+    this.authPath = '/api/auth';
 
     /**Database Connection */
     this.dbConnection();
@@ -48,7 +53,8 @@ class Server {
   }
 
   routes() {
-    this.app.use('/api/users', userRoutes)
+    this.app.use(this.userPath, userRoutes)
+    this.app.use(this.authPath, authRoutes)
   }
 
   listen() {

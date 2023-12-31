@@ -5,7 +5,12 @@ const passwordHashed = password => {
   return bcrypt.hashSync(password, salt);
 }
 
+const passwordVerify = (introducedPassword, actualPassword) => {
+  return bcrypt.compareSync(introducedPassword, actualPassword);
+}
+
 
 export {
-  passwordHashed
+  passwordHashed,
+  passwordVerify
 }
