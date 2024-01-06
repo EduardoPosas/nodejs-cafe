@@ -1,6 +1,9 @@
 import express from 'express';
 const router = express.Router();
 
+import { jwtValidate } from '../middleware/jwtValidate.js';
+import { roleValidate, hasRole } from '../middleware/roleValidate.js';
+
 import {
   getUsers,
   createUser,
@@ -21,7 +24,8 @@ router.post('/', validateCreate, createUser);
 
 router.put('/:userId', validateUpdate, updateUser);
 
-router.delete('/:userId', validateDelete, deleteUser);
+// router.delete('/:userId', jwtValidate, roleValidate, validateDelete, deleteUser);
+router.delete('/:userId', jwtValidate, hasRole('USER_ROLE', 'ADMIN_ROLE'), validateDelete, deleteUser);
 
 
 export default router;

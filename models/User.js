@@ -35,8 +35,11 @@ const userSchema = new Schema({
 
 // Overwrite JSON Object method
 userSchema.methods.toJSON = function () {
-  const { __v, password, ...user } = this.toObject();
-  return user;
+  const { __v, password, _id, ...user } = this.toObject();
+  return {
+    ...user,
+    uid: _id
+  };
 }
 
 

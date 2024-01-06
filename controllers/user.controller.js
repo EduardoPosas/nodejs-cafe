@@ -61,11 +61,10 @@ const deleteUser = async (req = request, res = response) => {
   const { userId } = req.params;
 
   // Delete User: by updating status to false
-
   await User.findByIdAndUpdate(userId, { status: false });
 
   res.json({
-    msg: 'Usuario eliminado con exito'
+    msg: 'Usuario eliminado con exito',
   });
 }
 
