@@ -2,17 +2,19 @@ import express from 'express';
 const router = express.Router();
 
 import {
-  login
+  login,
+  googleSignIn
 } from '../controllers/auth.controller.js';
 
 import {
-  validateLogin
+  validateLogin,
+  validateGoogleToken
 } from '../middleware/auth.js';
 
 
 router.post('/login', validateLogin, login);
 
-// router.post('/', validateCreate, createUser);
+router.post('/google', validateGoogleToken, googleSignIn);
 
 // router.put('/:userId', validateUpdate, updateUser);
 

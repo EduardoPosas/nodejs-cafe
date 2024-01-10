@@ -4,11 +4,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Google SignIn</title>
+  <style>
+    .g_logout {
+      margin-top: 2rem;
+      border: none;
+      background-color: hsl(9, 100%, 64%);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 0.25rem;
+    }
+
+    .g_logout:hover {
+      background-color: hsl(9, 100%, 40%);
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Acceso Denegado</h1>
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <h1>Autenticación con Google</h1>
+
+  <div id="g_id_onload" data-client_id="713666236610-u934l4d01f34tijmh1cu30vspqciep6s.apps.googleusercontent.com"
+    data-auto_prompt="false" data-callback="handleCredentialResponse">
+  </div>
+  <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+    data-shape="rectangular" data-logo_alignment="left">
+  </div>
+
+  <button class="g-logout" type="button">Cerra Sesión</button>
+
+  <script>
+    async function handleCredentialResponse(response) {
+      try {
+        const data = { googleToken: response.credential }
+        const serverResponse = await fetch('http://localhost:8000/api/auth/google', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        if (!serverResponse.ok) {
+          throw new Error('Fallo al ejecuta la petición');
+        }
+        const googleData = await serverResponse.json();
+        console.log(googleData.user.email);
+        // Save user in localstorage
+        localStorage.setItem('email', googleData.user.email);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const logoutBtn = document.querySelector('.g-logout')
+    logoutBtn.onclick = () => {
+      // Delete user from localstorage
+      const user = localStorage.getItem('email');
+      google.accounts.id.revoke(user, done => {
+        localStorage.clear();
+        location.reload();
+      });
+    }
+  </script>
+
 </body>
 
 </html>

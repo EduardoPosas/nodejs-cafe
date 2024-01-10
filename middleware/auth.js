@@ -18,6 +18,16 @@ const validateLogin = [
   }
 ];
 
+const validateGoogleToken = [
+  check('googleToken')
+    .exists()
+    .notEmpty(),
+  (req, res, next) => {
+    validateResult(req, res, next);
+  }
+];
+
 export {
   validateLogin,
+  validateGoogleToken
 };
